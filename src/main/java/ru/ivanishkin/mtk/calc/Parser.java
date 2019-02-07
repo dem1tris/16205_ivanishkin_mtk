@@ -29,25 +29,41 @@ public class Parser {
         int result = parseTerm();
         Lexeme.LexemeType type;
 
-        do {
-            type = currentLexeme.type;
+        type = currentLexeme.type;
+        while (type == Lexeme.LexemeType.PLUS || type == Lexeme.LexemeType.MINUS) {
             currentLexeme = lexer.getNextLexeme();
-
             if (type == Lexeme.LexemeType.PLUS) {
                 result += parseTerm();
-            } else if (type == Lexeme.LexemeType.MINUS) {
+            } else {
                 result -= parseTerm();
             }
-        } while (type == Lexeme.LexemeType.PLUS || type == Lexeme.LexemeType.MINUS);
+            type = currentLexeme.type;
+        }
         return result;
     }
 
     private int parseTerm() throws IOException, LexerException, ParserException {
+        int result = parseFactor();
+        Lexeme.LexemeType type = currentLexeme.type;
+
+        while (type == Lexeme.LexemeType.MUL || type == Lexeme.LexemeType.DIV) {
+            currentLexeme = lexer.getNextLexeme();
+            if (type == Lexeme.LexemeType.MUL) {
+                result *= parseFactor();
+            } else {
+                result /= parseFactor();
+            }
+            type = currentLexeme.type;
+        }
+        return result;
+    }
+
+    private int parseFactor() throws IOException, LexerException, ParserException {
         if (currentLexeme.type == Lexeme.LexemeType.NUMBER) {
             int number = new Integer(currentLexeme.text);
             currentLexeme = lexer.getNextLexeme();
             return number;
         }
-        throw new ParserException();
+        throw new ParserException(currentLexeme.type.toString());
     }
 }

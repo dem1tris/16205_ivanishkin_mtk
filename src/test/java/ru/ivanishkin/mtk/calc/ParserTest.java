@@ -1,5 +1,6 @@
 package ru.ivanishkin.mtk.calc;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -32,5 +33,22 @@ class ParserTest {
         assertEquals(123 - 3 + 234 + 12 - 1, parser.calculate());
     }
 
+    @Test
+    void div() throws IOException {
+        Parser parser = new Parser(new StringReader("120/3"));
+        assertEquals(120/3, parser.calculate());
+    }
+
+    @Test
+    void mul() throws IOException {
+        Parser parser = new Parser(new StringReader("120*3"));
+        assertEquals(120*3, parser.calculate());
+    }
+
+    @Test
+    void divMul() throws IOException {
+        Parser parser = new Parser(new StringReader("120/ 3 * 2 / 3"));
+        assertEquals(120/ 3 * 2 / 3, parser.calculate());
+    }
 
 }
