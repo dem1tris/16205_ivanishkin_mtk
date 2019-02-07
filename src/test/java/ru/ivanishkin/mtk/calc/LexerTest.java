@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.ivanishkin.mtk.calc.Lexeme.LexemeType.*;
 
 class LexerTest {
 
@@ -13,7 +14,7 @@ class LexerTest {
     void plus() throws IOException, LexerException {
         Lexer lexer = new Lexer(new StringReader("+"));
         Lexeme lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.PLUS);
+        assertSame(lexeme.type, PLUS);
         assertEquals("+", lexeme.text);
     }
 
@@ -21,7 +22,7 @@ class LexerTest {
     void minus() throws IOException, LexerException {
         Lexer lexer = new Lexer(new StringReader("-"));
         Lexeme lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.MINUS);
+        assertSame(lexeme.type, MINUS);
         assertEquals("-", lexeme.text);
     }
 
@@ -29,7 +30,7 @@ class LexerTest {
     void number() throws IOException, LexerException {
         Lexer lexer = new Lexer(new StringReader("123"));
         Lexeme lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.NUMBER);
+        assertSame(lexeme.type, NUMBER);
         assertEquals("123", lexeme.text);
     }
 
@@ -38,7 +39,7 @@ class LexerTest {
         Lexer lexer = new Lexer(new StringReader("345"));
         lexer.getNextLexeme();
         Lexeme lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.EOF);
+        assertSame(lexeme.type, EOF);
         assertEquals("", lexeme.text);
     }
 
@@ -46,27 +47,27 @@ class LexerTest {
     void complex() throws IOException, LexerException {
         Lexer lexer = new Lexer(new StringReader("+-234+"));
         Lexeme lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.PLUS);
+        assertSame(lexeme.type, PLUS);
         assertEquals("+", lexeme.text);
 
         lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.MINUS);
+        assertSame(lexeme.type, MINUS);
         assertEquals("-", lexeme.text);
 
         lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.NUMBER);
+        assertSame(lexeme.type, NUMBER);
         assertEquals("234", lexeme.text);
 
         lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.PLUS);
+        assertSame(lexeme.type, PLUS);
         assertEquals("+", lexeme.text);
 
         lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.EOF);
+        assertSame(lexeme.type, EOF);
         assertEquals("", lexeme.text);
 
         lexeme = lexer.getNextLexeme();
-        assertSame(lexeme.type, Lexeme.LexemeType.EOF);
+        assertSame(lexeme.type, EOF);
         assertEquals("", lexeme.text);
     }
 
@@ -77,4 +78,19 @@ class LexerTest {
         assertThrows(LexerException.class, lexer::getNextLexeme);
     }
 
+    @Test
+    void paren() throws IOException, LexerException {
+        Lexer lexer = new Lexer(new StringReader(")("));
+        assertSame(Lexeme.RPAREN, lexer.getNextLexeme());
+        assertSame(Lexeme.LPAREN, lexer.getNextLexeme());
+    }
+
+    @Test
+    void divmul() throws IOException, LexerException {
+        Lexer lexer = new Lexer(new StringReader(")/(*"));
+        lexer.getNextLexeme();
+        assertSame(Lexeme.DIV, lexer.getNextLexeme());
+        lexer.getNextLexeme();
+        assertSame(Lexeme.MUL, lexer.getNextLexeme());
+    }
 }

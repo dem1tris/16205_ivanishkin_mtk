@@ -9,7 +9,9 @@ public class Lexer {
 
     public Lexer(final Reader reader) throws IOException {
         this.reader = reader;
-        nextSymbol = this.reader.read();
+        do {
+            nextSymbol = this.reader.read();
+        } while (Character.isWhitespace(nextSymbol));
     }
 
     public Lexeme getNextLexeme() throws IOException, LexerException {
@@ -17,7 +19,9 @@ public class Lexer {
 
         do {
             int currentSymbol = nextSymbol;
-            nextSymbol = reader.read();
+            do {
+                nextSymbol = this.reader.read();
+            } while (Character.isWhitespace(nextSymbol));
 
             switch (currentSymbol) {
                 case -1:
@@ -26,6 +30,14 @@ public class Lexer {
                     return Lexeme.PLUS;
                 case '-':
                     return Lexeme.MINUS;
+                case '/':
+                    return Lexeme.DIV;
+                case '*':
+                    return Lexeme.MUL;
+                case '(':
+                    return Lexeme.LPAREN;
+                case ')':
+                    return Lexeme.RPAREN;
                 case '0':
                 case '1':
                 case '2':
