@@ -38,6 +38,8 @@ public class Lexer {
                     return Lexeme.LPAREN;
                 case ')':
                     return Lexeme.RPAREN;
+                case '^':
+                    return Lexeme.POW;
                 case '0':
                 case '1':
                 case '2':

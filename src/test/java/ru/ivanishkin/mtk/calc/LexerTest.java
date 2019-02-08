@@ -93,4 +93,12 @@ class LexerTest {
         lexer.getNextLexeme();
         assertSame(Lexeme.MUL, lexer.getNextLexeme());
     }
+
+    @Test
+    void pow() throws IOException, LexerException {
+        Lexer lexer = new Lexer(new StringReader("123^321"));
+        lexer.getNextLexeme();
+        assertSame(Lexeme.POW, lexer.getNextLexeme());
+        assertSame(NUMBER, lexer.getNextLexeme().type);
+    }
 }
