@@ -69,6 +69,16 @@ class ParserTest {
         assertEquals(2 + 2 * 2 - (3 + 3 * (3)), parser.calculate());
     }
 
+    @Test
+    void pow() throws IOException {
+        Parser parser = new Parser(new StringReader("2^2^2^2"));
+        assertEquals(65536, parser.calculate());
+    }
 
+    @Test
+    void pow1() throws IOException {
+        Parser parser = new Parser(new StringReader("2^2^(2+2)"));
+        assertEquals(65536, parser.calculate());
+    }
 
 }

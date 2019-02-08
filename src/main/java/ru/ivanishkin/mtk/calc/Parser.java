@@ -59,6 +59,22 @@ public class Parser {
     }
 
     private int parseFactor() throws IOException, LexerException, ParserException {
+        int result = parsePower();
+        Lexeme.LexemeType type = currentLexeme.type;
+
+        if (type == Lexeme.LexemeType.POW) {
+            currentLexeme = lexer.getNextLexeme();
+            int exp = parseFactor();
+            if (exp >= 0) {
+                result = pow(result, exp);
+            } else {
+                result = 1 / pow(result, -exp);
+            }
+        }
+        return result;
+    }
+
+    private int parsePower() throws IOException, LexerException, ParserException {
         if (currentLexeme.type == Lexeme.LexemeType.NUMBER) {
             int number = new Integer(currentLexeme.text);
             currentLexeme = lexer.getNextLexeme();
@@ -72,5 +88,13 @@ public class Parser {
             }
         }
         throw new ParserException(currentLexeme.type.toString());
+    }
+
+    private int pow(int base, int exp) {
+        if (exp < 0) throw new IllegalArgumentException();
+        if (exp == 0) return 1;
+        if (exp == 1) return base;
+        if (exp % 2 == 0) return pow(base * base, exp / 2);
+        else return base * pow(base * base, exp / 2);
     }
 }
