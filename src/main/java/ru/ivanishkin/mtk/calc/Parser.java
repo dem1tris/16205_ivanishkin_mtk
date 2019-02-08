@@ -63,6 +63,13 @@ public class Parser {
             int number = new Integer(currentLexeme.text);
             currentLexeme = lexer.getNextLexeme();
             return number;
+        } else if (currentLexeme.type == Lexeme.LexemeType.LPAREN) {
+            currentLexeme = lexer.getNextLexeme();
+            int result = parseExpr();
+            if (currentLexeme.type == Lexeme.LexemeType.RPAREN) {
+                currentLexeme = lexer.getNextLexeme();
+                return result;
+            }
         }
         throw new ParserException(currentLexeme.type.toString());
     }

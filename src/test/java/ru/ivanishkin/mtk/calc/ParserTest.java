@@ -51,4 +51,24 @@ class ParserTest {
         assertEquals(120/ 3 * 2 / 3, parser.calculate());
     }
 
+    @Test
+    void parentheses() throws IOException {
+        Parser parser = new Parser(new StringReader("(2 * (2 + 2 *(2))/1)"));
+        assertEquals((2 * (2 + 2 *(2))/1), parser.calculate());
+    }
+
+    @Test
+    void badParentheses() throws IOException {
+        Parser parser = new Parser(new StringReader("(2 * 2))"));
+        assertThrows(RuntimeException.class, parser::calculate);
+    }
+
+    @Test
+    void divMulPlusMinusParen() throws IOException {
+        Parser parser = new Parser(new StringReader("2 + 2 * 2 - (3 + 3 * (3))"));
+        assertEquals(2 + 2 * 2 - (3 + 3 * (3)), parser.calculate());
+    }
+
+
+
 }
