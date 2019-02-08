@@ -75,6 +75,14 @@ public class Parser {
     }
 
     private int parsePower() throws IOException, LexerException, ParserException {
+        if (currentLexeme.type == Lexeme.LexemeType.MINUS) {
+            currentLexeme = lexer.getNextLexeme();
+            return -parseAtom();
+        } else {
+            return parseAtom();
+        }
+    }
+    private int parseAtom() throws IOException, LexerException, ParserException {
         if (currentLexeme.type == Lexeme.LexemeType.NUMBER) {
             int number = new Integer(currentLexeme.text);
             currentLexeme = lexer.getNextLexeme();

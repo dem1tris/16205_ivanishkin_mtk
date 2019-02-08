@@ -1,12 +1,12 @@
 package ru.ivanishkin.mtk.calc;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ParserTest {
     @Test
@@ -36,25 +36,25 @@ class ParserTest {
     @Test
     void div() throws IOException {
         Parser parser = new Parser(new StringReader("120/3"));
-        assertEquals(120/3, parser.calculate());
+        assertEquals(120 / 3, parser.calculate());
     }
 
     @Test
     void mul() throws IOException {
         Parser parser = new Parser(new StringReader("120*3"));
-        assertEquals(120*3, parser.calculate());
+        assertEquals(120 * 3, parser.calculate());
     }
 
     @Test
     void divMul() throws IOException {
         Parser parser = new Parser(new StringReader("120/ 3 * 2 / 3"));
-        assertEquals(120/ 3 * 2 / 3, parser.calculate());
+        assertEquals(120 / 3 * 2 / 3, parser.calculate());
     }
 
     @Test
     void parentheses() throws IOException {
         Parser parser = new Parser(new StringReader("(2 * (2 + 2 *(2))/1)"));
-        assertEquals((2 * (2 + 2 *(2))/1), parser.calculate());
+        assertEquals((2 * (2 + 2 * (2)) / 1), parser.calculate());
     }
 
     @Test
@@ -78,6 +78,12 @@ class ParserTest {
     @Test
     void pow1() throws IOException {
         Parser parser = new Parser(new StringReader("2^2^(2+2)"));
+        assertEquals(65536, parser.calculate());
+    }
+
+    @Test
+    void unaryMinus() throws IOException {
+        Parser parser = new Parser(new StringReader("-2^2^-(-2-2)"));
         assertEquals(65536, parser.calculate());
     }
 
