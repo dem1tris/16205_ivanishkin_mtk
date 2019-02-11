@@ -1,6 +1,7 @@
 package ru.ivanishkin.mtk.calc;
 
 import org.junit.jupiter.api.Test;
+import ru.ivanishkin.mtk.calc.parser.Parser;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -64,6 +65,12 @@ class ParserTest {
     }
 
     @Test
+    void anotherBadParentheses() throws IOException {
+        Parser parser = new Parser(new StringReader("(2 * () - 2)"));
+        assertThrows(RuntimeException.class, parser::calculate);
+    }
+
+    @Test
     void divMulPlusMinusParen() throws IOException {
         Parser parser = new Parser(new StringReader("2 + 2 * 2 - (3 + 3 * (3))"));
         assertEquals(2 + 2 * 2 - (3 + 3 * (3)), parser.calculate());
@@ -85,6 +92,24 @@ class ParserTest {
     void unaryMinus() throws IOException {
         Parser parser = new Parser(new StringReader("-2^2^-(-2-2)"));
         assertEquals(65536, parser.calculate());
+    }
+
+    @Test
+    void minusMinus() throws IOException {
+        Parser parser = new Parser(new StringReader("--2"));
+        assertThrows(RuntimeException.class, parser::calculate);
+    }
+
+    @Test
+    void goodMinusMinus() throws IOException {
+        Parser parser = new Parser(new StringReader("-2--2--2--2--2"));
+        assertEquals(6, parser.calculate());
+    }
+
+    @Test
+    void mediumTest() throws IOException {
+        Parser parser = new Parser(new StringReader("(2+-20)*(3^(5*1)-3^2^2)"));
+        assertEquals((2+-20)*(243-81), parser.calculate());
     }
 
 }

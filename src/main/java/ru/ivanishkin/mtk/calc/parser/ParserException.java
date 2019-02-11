@@ -1,7 +1,6 @@
-package ru.ivanishkin.mtk.calc;
+package ru.ivanishkin.mtk.calc.parser;
 
 public class ParserException extends Exception {
-    //TODO:
 
     private static final String MESSAGE = "Syntax error";
 

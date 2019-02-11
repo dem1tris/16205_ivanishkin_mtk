@@ -1,12 +1,15 @@
 package ru.ivanishkin.mtk.calc;
 
 import org.junit.jupiter.api.Test;
+import ru.ivanishkin.mtk.calc.lexer.Lexeme;
+import ru.ivanishkin.mtk.calc.lexer.Lexer;
+import ru.ivanishkin.mtk.calc.lexer.LexerException;
 
 import java.io.IOException;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.ivanishkin.mtk.calc.Lexeme.LexemeType.*;
+import static ru.ivanishkin.mtk.calc.lexer.Lexeme.LexemeType.*;
 
 class LexerTest {
 

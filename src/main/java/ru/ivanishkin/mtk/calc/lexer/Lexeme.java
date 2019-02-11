@@ -1,4 +1,4 @@
-package ru.ivanishkin.mtk.calc;
+package ru.ivanishkin.mtk.calc.lexer;
 
 public class Lexeme {
     public static Lexeme PLUS = new Lexeme(LexemeType.PLUS, "+");
